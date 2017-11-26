@@ -74,6 +74,23 @@ actions.createPlainController = (controllerName) => {
 
     // Create controller
     fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',plainControllerText);
+
+    // Use this controller in server.js
+    var serverText = fs.readFileSync('./rest/server.js').toString();
+    var arrayOfLines = serverText.split("\n");
+    var index;
+    arrayOfLines.forEach((line,i) => {
+      if(line.includes('= express();')) {
+        index = i;
+      }
+    })
+    arrayOfLines.splice(++index,0,"\n");
+    arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
+    arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"',"+fullControllerName+");");
+
+    var newServerText = arrayOfLines.join('\n');
+    fs.writeFileSync('./rest/server.js',newServerText);
+
   }
   else success = false;
 
@@ -137,9 +154,23 @@ ${routesString}
 module.exports = router;
 `;
 
-      console.log(routesControllerText);
-
       fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',routesControllerText);
+
+      // Use this controller in server.js
+      var serverText = fs.readFileSync('./rest/server.js').toString();
+      var arrayOfLines = serverText.split("\n");
+      var index;
+      arrayOfLines.forEach((line,i) => {
+        if(line.includes('= express();')) {
+          index = i;
+        }
+      })
+      arrayOfLines.splice(++index,0,"\n");
+      arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
+      arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"',"+fullControllerName+");");
+  
+      var newServerText = arrayOfLines.join('\n');
+      fs.writeFileSync('./rest/server.js',newServerText);
   }
   else success = false;
 
