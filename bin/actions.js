@@ -6,9 +6,8 @@ var actions = {};
 
 /**
  * Initializes the current directory with all the files needed.
- * @param {*String} appName 
  */
-actions.init = (appName) => {
+actions.init = () => {
   var initSuccessful = true;
   if(!fs.existsSync('./rest')) {
     // Create folder structure
@@ -19,21 +18,13 @@ actions.init = (appName) => {
     if(!fs.existsSync('package.json')) {
       var packageJsonText = fs.readFileSync('../templates/packageTemplate.json');
 
-      packageJsonText = packageJsonText.toString().replace('$appName',appName);
-
       fs.writeFileSync('package.json',packageJsonText);
     }
-    else initSuccessful = false;
 
     // Create server.js
-    if(!fs.existsSync('./rest/server.js')) {
-      var serverText = fs.readFileSync('../templates/serverTemplate.js');
-      
-      // replace needed text
+    var serverText = fs.readFileSync('../templates/serverTemplate.js');
 
-      fs.writeFileSync('./rest/server.js',serverText);
-    }
-    else initSuccessful = false;
+    fs.writeFileSync('./rest/server.js',serverText);
 
     
   }
@@ -53,11 +44,116 @@ actions.init = (appName) => {
 }
 
 /**
- * Creates a new api controller in rest/controllers
+ * Creates a new plain api controller in rest/controllers with get and post
  * @param {*String} controllerName 
  */
-actions.createController = (controllerName) => {
-  console.log(controllerName+'Controller');
+actions.createPlainController = (controllerName) => {
+
+  // If /rest/controllers doesn't exist return
+  if(!fs.existsSync('./rest/controllers')) {
+    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a controller");
+    console.log(config.terminal_colors.white);
+    return;
+  }
+
+  var success = true;
+  var fullControllerName;
+  // get fullControllerName to contain Controller
+  if(!controllerName.includes('Controller')) {
+    fullControllerName = controllerName.toLowerCase()+'Controller';
+  } else fullControllerName = controllerName;
+
+  // Only create controller if it doesn't exist already
+  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
+    var plainControllerText = fs.readFileSync('../templates/plainControllerTemplate.js');
+    
+    // get plain controller name eg foodController -> food
+    var routeName = fullControllerName.replace('Controller','');
+
+    plainControllerText = plainControllerText.toString().replace(new RegExp('{{controllerName}}','g'), routeName);
+
+    // Create controller
+    fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',plainControllerText);
+  }
+  else success = false;
+
+  if(success) {
+    console.log(config.terminal_colors.green,'----------------------------');
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName);
+    console.log(config.terminal_colors.green,'----------------------------');
+    console.log(config.terminal_colors.white);
+  }
+  else {
+    console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
+    console.log(config.terminal_colors.white);
+  }
+
+}
+
+/**
+ * 
+ * @param {*String} controllerName 
+ * @param {*Object} routes 
+ */
+actions.createControllerWithCustomRoutes = (controllerName, routes) => {
+  if(!fs.existsSync('./rest/controllers')) {
+    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a controller");
+    console.log(config.terminal_colors.white);
+    return;
+  }
+
+  var success = true;
+  var fullControllerName;
+  // get fullControllerName to contain Controller
+  if(!controllerName.includes('Controller')) {
+    fullControllerName = controllerName.toLowerCase()+'Controller';
+  } else fullControllerName = controllerName;
+
+  // Only create controller if it doesn't exist already
+  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
+
+      var basicControllerName = fullControllerName.replace('Controller','');
+      var routesString = '';
+    
+      // Go through all of the routes and create them
+      for(var prop in routes) {
+        var lowercaseProp = prop.toLowerCase();
+        var lowercaseMethod = routes[prop].toLowerCase();
+
+        routesString += `// ${lowercaseMethod} /api/${basicControllerName}/${lowercaseProp}
+router.${lowercaseMethod}('/${lowercaseProp}',(req,res) => {
+  
+});
+
+`;
+      }
+
+      // Push the routes in the rest
+      var routesControllerText = `// ${basicControllerName} controller routes
+var express = require('express');
+var router = express.Router();
+
+${routesString}
+module.exports = router;
+`;
+
+      console.log(routesControllerText);
+
+      fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',routesControllerText);
+  }
+  else success = false;
+
+  if(success) {
+    console.log(config.terminal_colors.green,'----------------------------');
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName);
+    console.log(config.terminal_colors.green,'----------------------------');
+    console.log(config.terminal_colors.white);
+  }
+  else {
+    console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
+    console.log(config.terminal_colors.white);
+  }
+
 }
 
 module.exports = actions;

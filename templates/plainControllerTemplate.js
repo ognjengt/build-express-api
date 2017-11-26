@@ -1,15 +1,25 @@
-// $controllerName controller routes
+// {{controllerName}} controller routes
 var express = require('express');
 var router = express.Router();
 
-// GET /api/$controllerName/
+// get /api/{{controllerName}}/
 router.get('/',(req,res) => {
   res.send('GET response');
 });
 
-// POST /api/$controllerName/
+// post /api/{{controllerName}}/
 router.post('/',(req,res) => {
   res.send('POST response');
+});
+
+// put /api/{{controllerName}}/
+router.put('/',(req,res) => {
+  res.send('PUT response');
+});
+
+// delete /api/{{controllerName}}/
+router.delete('/',(req,res) => {
+  res.send('DELETE response');
 });
 
 module.exports = router;

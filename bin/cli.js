@@ -10,11 +10,11 @@ program
 
 // Init
 program
-  .command('init <appName>')
+  .command('init')
   .alias('i')
   .description('Initializes the current directory with all files needed.')
-  .action((appName) => {
-    actions.init(appName);
+  .action(() => {
+    actions.init();
   })
 
 // Create controller
@@ -23,7 +23,14 @@ program
   .alias('cc')
   .description('Creates a new api controller in rest/controllers/')
   .action(() => {
-    prompt(questions.createControllerQs).then(answer => actions.createController(answer.controllerName));
+    prompt(questions.createControllerQs).then(answers => {
+      if(answers.controllerType == 'Custom routes') {
+        prompt(questions.customRouteQs).then(answer => actions.createControllerWithCustomRoutes(answers.controllerName,JSON.parse(answer.customRoutes)));
+      }
+      else{
+        actions.createPlainController(answers.controllerName);
+      }
+    });
   })
 
 program.parse(process.argv);
