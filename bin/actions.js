@@ -1,6 +1,6 @@
 // Implementations of actions
-const fs              = require('fs');
-const config          = require('./config');
+const fs      = require('fs');
+const config  = require('./config');
 
 var actions = {};
 
@@ -58,7 +58,6 @@ actions.init = (appName) => {
  */
 actions.createController = (controllerName) => {
   console.log(controllerName+'Controller');
-  console.log(mainDirName);
 }
 
 module.exports = actions;

@@ -9,7 +9,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "express": "*"
-
+    "express": "*",
+    "bodyParser": "*"
   }
 }
