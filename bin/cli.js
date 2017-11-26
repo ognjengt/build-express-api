@@ -2,6 +2,7 @@ const program     = require('commander');
 const { prompt }  = require('inquirer');
 const actions     = require('./actions');
 const config      = require('./config');
+const questions   = require('./questions');
 
 program
   .version(config.cli_version)
@@ -9,11 +10,11 @@ program
 
 // Init
 program
-  .command('init')
+  .command('init <appName>')
   .alias('i')
   .description('Initializes the current directory with all files needed.')
-  .action(() => {
-    actions.init();
+  .action((appName) => {
+    actions.init(appName);
   })
 
 // Create controller
@@ -22,7 +23,7 @@ program
   .alias('cc')
   .description('Creates a new api controller in rest/controllers/')
   .action(() => {
-    actions.createController('proba');
+    prompt(questions.createControllerQs).then(answer => actions.createController(answer.controllerName));
   })
 
 program.parse(process.argv);
