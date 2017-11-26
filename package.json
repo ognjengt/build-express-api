@@ -1,0 +1,23 @@
+{
+  "name": "build-express-api",
+  "version": "1.0.0",
+  "description": "Command line interface for instantly building an express rest api",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ognjengt/build-express-api.git"
+  },
+  "author": "Ognjen Gatalo <ognjeng95@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ognjengt/build-express-api/issues"
+  },
+  "homepage": "https://github.com/ognjengt/build-express-api#readme",
+  "dependencies": {
+    "commander": "^2.12.1",
+    "inquirer": "^4.0.0"
+  }
+}
