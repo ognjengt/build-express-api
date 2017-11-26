@@ -9,12 +9,12 @@ program
 
 // Init
 program
-.command('init')
-.alias('i')
-.description('Initializes the current directory with all files needed.')
-.action(() => {
-  actions.init();
-})
+  .command('init')
+  .alias('i')
+  .description('Initializes the current directory with all files needed.')
+  .action(() => {
+    actions.init();
+  })
 
 // Create controller
 program
