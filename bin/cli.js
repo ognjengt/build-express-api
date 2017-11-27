@@ -33,4 +33,13 @@ program
     });
   })
 
+program
+  .command('add-routes <controllerName>')
+  .alias('ar')
+  .description('Adds the routes to the controller provided')
+  .action((controllerName) => {
+    prompt(questions.customRouteQs).then(answer => actions.addRoutes(controllerName,JSON.parse(answer.customRoutes)));
+  })
+
+
 program.parse(process.argv);

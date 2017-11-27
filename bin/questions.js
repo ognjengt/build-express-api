@@ -19,7 +19,7 @@ const customRouteQs = [
   {
     type: 'input',
     name: 'customRoutes',
-    message: 'Enter routes in format { routeName: METHOD, }: '
+    message: 'Enter routes in format { "routeName": "METHOD", }: '
   }
 ]
 

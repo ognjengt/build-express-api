@@ -96,7 +96,7 @@ actions.createPlainController = (controllerName) => {
 
   if(success) {
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName);
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
   }
@@ -176,7 +176,7 @@ module.exports = router;
 
   if(success) {
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName);
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
   }
@@ -185,6 +185,56 @@ module.exports = router;
     console.log(config.terminal_colors.white);
   }
 
+}
+
+/**
+ * Adds the routes to the controller provided
+ * @param {*String} controllerName 
+ * @param {*Object} routes 
+ */
+actions.addRoutes = (controllerName,routes) => {
+  
+  var fullControllerName;
+  if(!controllerName.includes('Controller')) {
+    fullControllerName = controllerName+'Controller';
+  }
+  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
+    console.log(config.terminal_colors.red,"✖ Controller with that name doesn't exist, please chect /rest/controllers and provide an existing controller.");
+    console.log(config.terminal_colors.white);
+    return;
+  }
+
+  var routesString = '';
+  var basicControllerName = fullControllerName.replace('Controller','');
+
+  console.log(routesString);
+  // Go through controller.js and add routes to the end
+  var controllerText = fs.readFileSync('./rest/controllers/'+fullControllerName+'.js').toString();
+  var arrayOfLines = controllerText.split("\n");
+  var index;
+  arrayOfLines.forEach((line,i) => {
+    if(line.includes('module.exports = router')) {
+      index = i;
+    }
+  })
+  // Go through all of the routes and create them
+  for(var prop in routes) {
+    var lowercaseProp = prop.toLowerCase();
+    var lowercaseMethod = routes[prop].toLowerCase();
+
+    arrayOfLines.splice(index,0,`// ${lowercaseMethod} /api/${basicControllerName}/${lowercaseProp}`);
+    arrayOfLines.splice(++index,0,`router.${lowercaseMethod}('/${lowercaseProp}',(req,res) => {`);
+    arrayOfLines.splice(++index,0," ");
+    arrayOfLines.splice(++index,0,'});\n');
+    index++;
+  }
+  var newControllerText = arrayOfLines.join('\n');
+  fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',newControllerText);
+  
+  console.log(config.terminal_colors.green,'----------------------------');
+  console.log(config.terminal_colors.green,'✔ Routes added successfully, check rest/controllers/'+fullControllerName+'.js');
+  console.log(config.terminal_colors.green,'----------------------------');
+  console.log(config.terminal_colors.white);
 }
 
 module.exports = actions;
