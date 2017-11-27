@@ -19,13 +19,27 @@ const customRouteQs = [
   {
     type: 'input',
     name: 'customRoutes',
-    message: 'Enter routes in format { "routeName": "METHOD", }: '
+    message: 'Enter routes in JSON format { "routeName": "METHOD", }: '
+  }
+];
+
+const createModelQs = [
+  {
+    type: 'input',
+    name: 'modelName',
+    message: 'Model name: '
+  },
+  {
+    type: 'input',
+    name: 'modelProps',
+    message: 'Enter model properties ( eg. username: String, ):'
   }
 ]
 
 const questions = {
   createControllerQs,
-  customRouteQs
+  customRouteQs,
+  createModelQs
 }
 
 module.exports = questions;

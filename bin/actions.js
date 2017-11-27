@@ -193,7 +193,7 @@ module.exports = router;
  * @param {*Object} routes 
  */
 actions.addRoutes = (controllerName,routes) => {
-  
+
   var fullControllerName;
   if(!controllerName.includes('Controller')) {
     fullControllerName = controllerName+'Controller';
@@ -235,6 +235,18 @@ actions.addRoutes = (controllerName,routes) => {
   console.log(config.terminal_colors.green,'✔ Routes added successfully, check rest/controllers/'+fullControllerName+'.js');
   console.log(config.terminal_colors.green,'----------------------------');
   console.log(config.terminal_colors.white);
+}
+
+/**
+ * Creates new model in rest/models
+ * @param {*String} name 
+ * @param {*Object} props 
+ */
+actions.createModel = (name,props) => {
+  
+  console.log(name);
+  console.log(props);
+
 }
 
 module.exports = actions;

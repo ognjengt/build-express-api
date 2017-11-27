@@ -41,5 +41,13 @@ program
     prompt(questions.customRouteQs).then(answer => actions.addRoutes(controllerName,JSON.parse(answer.customRoutes)));
   })
 
+program
+  .command('create-model')
+  .alias('cm')
+  .description('Creates new model in rest/models')
+  .action(() => {
+    prompt(questions.createModelQs).then(answers => actions.createModel(answers.modelName, answers.modelProps));
+  })
+
 
 program.parse(process.argv);
