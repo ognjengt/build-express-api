@@ -1,5 +1,5 @@
 var express     = require('express');
-var bodyParser  = require('bodyParser');
+var bodyParser  = require('body-parser');
 
 var app         = express(); // Please do not remove this line, since CLI uses this line as guidance to import new controllers
 

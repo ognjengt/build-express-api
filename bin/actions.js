@@ -89,7 +89,7 @@ actions.createPlainController = (controllerName) => {
     })
     arrayOfLines.splice(++index,0,"\n");
     arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
-    arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"',"+fullControllerName+");");
+    arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"', "+fullControllerName+");");
 
     var newServerText = arrayOfLines.join('\n');
     fs.writeFileSync('./rest/server.js',newServerText);
@@ -170,7 +170,7 @@ module.exports = router;
       })
       arrayOfLines.splice(++index,0,"\n");
       arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
-      arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"',"+fullControllerName+");");
+      arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"', "+fullControllerName+");");
   
       var newServerText = arrayOfLines.join('\n');
       fs.writeFileSync('./rest/server.js',newServerText);
