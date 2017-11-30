@@ -1,8 +1,11 @@
 // Implementations of actions
-const fs      = require('fs');
-const config  = require('./config');
+const fs                   = require('fs');
+const config               = require('./config');
+const { getInstalledPathSync } = require('get-installed-path');
 
 var actions = {};
+
+var globalModulePath = getInstalledPathSync('build-express-api');
 
 /**
  * Initializes the current directory with all the files needed.
@@ -16,13 +19,13 @@ actions.init = () => {
     fs.mkdirSync('./rest/controllers');
     // Create package.json
     if(!fs.existsSync('package.json')) {
-      var packageJsonText = fs.readFileSync('../templates/packageTemplate.json');
+      var packageJsonText = fs.readFileSync(globalModulePath+'/templates/packageTemplate.json');
 
       fs.writeFileSync('package.json',packageJsonText);
     }
 
     // Create server.js
-    var serverText = fs.readFileSync('../templates/serverTemplate.js');
+    var serverText = fs.readFileSync(globalModulePath+'/templates/serverTemplate.js');
 
     fs.writeFileSync('./rest/server.js',serverText);
 
@@ -65,7 +68,7 @@ actions.createPlainController = (controllerName) => {
 
   // Only create controller if it doesn't exist already
   if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
-    var plainControllerText = fs.readFileSync('../templates/plainControllerTemplate.js');
+    var plainControllerText = fs.readFileSync(globalModulePath+'/templates/plainControllerTemplate.js');
     
     // get plain controller name eg foodController -> food
     var routeName = fullControllerName.replace('Controller','');
@@ -257,7 +260,7 @@ actions.createModel = (name,props) => {
     return;
   }
 
-  var modelTemplateText = fs.readFileSync('../templates/modelTemplate.js').toString();
+  var modelTemplateText = fs.readFileSync(globalModulePath+'/templates/modelTemplate.js').toString();
   modelTemplateText = modelTemplateText.replace(new RegExp('modelname','g'), name);
   props = props.replace(new RegExp(',', 'g'), ',\n ');
   props = props.replace(new RegExp('{', 'g'), '{\n   ');
