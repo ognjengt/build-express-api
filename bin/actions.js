@@ -51,7 +51,7 @@ actions.createPlainController = (controllerName) => {
 
   // If /rest/controllers doesn't exist return
   if(!fs.existsSync('./rest/controllers')) {
-    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a controller");
+    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a new controller");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -114,7 +114,7 @@ actions.createPlainController = (controllerName) => {
  */
 actions.createControllerWithCustomRoutes = (controllerName, routes) => {
   if(!fs.existsSync('./rest/controllers')) {
-    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a controller");
+    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a new controller");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -240,13 +240,36 @@ actions.addRoutes = (controllerName,routes) => {
 /**
  * Creates new model in rest/models
  * @param {*String} name 
- * @param {*Object} props 
+ * @param {*String} props 
  */
 actions.createModel = (name,props) => {
   
-  console.log(name);
-  console.log(props);
+  if(!fs.existsSync('./rest/models')) {
+    console.log(config.terminal_colors.red,"✖ Missing directory rest/models, please run build-express-api init, before adding a new model");
+    console.log(config.terminal_colors.white);
+    return;
+  }
+  name = name.charAt(0).toUpperCase() + name.slice(1);
 
+  if (fs.existsSync('./rest/models/'+name+'.js')) {
+    console.log(config.terminal_colors.red,"✖ Model with that name already exists.");
+    console.log(config.terminal_colors.white);
+    return;
+  }
+
+  var modelTemplateText = fs.readFileSync('../templates/modelTemplate.js').toString();
+  modelTemplateText = modelTemplateText.replace(new RegExp('modelname','g'), name);
+  props = props.replace(new RegExp(',', 'g'), ',\n ');
+  props = props.replace(new RegExp('{', 'g'), '{\n   ');
+  props = props.replace(new RegExp('}', 'g'), '\n }');
+  modelTemplateText = modelTemplateText.replace('PROPS',props);
+
+  fs.writeFileSync('./rest/models/'+name+'.js',modelTemplateText);
+
+  console.log(config.terminal_colors.green,'----------------------------');
+  console.log(config.terminal_colors.green,'✔ Model '+name+' created successfully, check rest/models/'+name+'.js');
+  console.log(config.terminal_colors.green,'----------------------------');
+  console.log(config.terminal_colors.white);
 }
 
 module.exports = actions;
