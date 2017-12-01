@@ -74,6 +74,8 @@ Example:
 
 **Note:** *When creating new model, you don't need to provide the properties in strict JSON format, just separate them with the comma*
 
+Also models are not automatically imported in server.js, so you will need to import them manually.
+
 This CLI supports only mongoose models for now.
 
 **Note:** The experience this CLI provides does not work as smooth in Git Bash terminal, since it is not an interactive terminal, but if you are using Git Bash inside VS Code, then there are no problems, I found no complications using any other terminal.
