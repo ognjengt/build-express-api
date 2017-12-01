@@ -42,6 +42,11 @@ $ npm install
 ```sh
 $ build-express-api create-controller
 ```
+or
+```sh
+$ build-express-api cc
+```
+
 The CLI will now take you through series of questions, the example of building a new controller would be:
 
 ![Creating a plain controller](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/createControllerPlain.JPG)
@@ -66,6 +71,10 @@ When the controller is created it will automatically be imported in server.js fi
 ```sh
 $ build-express-api add-routes <controllerName>
 ```
+or
+```sh
+$ build-express-api ar <controllerName>
+```
 Example:
 
 ![Adding routes to a controller](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/addRoutesComplete.JPG)
@@ -73,6 +82,10 @@ Example:
 ## Creating new model
 ```sh
 $ build-express-api create-model
+```
+or
+```sh
+$ build-express-api cm
 ```
 Example:
 
