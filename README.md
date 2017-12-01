@@ -7,7 +7,7 @@ Create controllers, models and add routes in matter of seconds.
 *This CLI only supports Node 6 and over.*
 
 ## Installation
-Install it globally:
+Install it once globally:
 ```sh
 $ npm install -g build-express-api
 ```
@@ -40,7 +40,8 @@ The CLI will now take you through series of questions, the example of building a
 
 ![Creating a plain controller](https://github.com/ognjengt/build-express-api/blob/master/assets/createControllerPlain.JPG)
 
-You can choose the **plain controller** or **custom routes** controller from the menu. <br>
+You can choose the **plain controller** or **custom routes** controller from the menu.
+
 **Plain controller** just creates a controller with built in routes in rest/controllers/controllerName.js.
 
 **Custom routes** controller allows you to manually add your routes, the example of building custom routes controller would be:
