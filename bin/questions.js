@@ -9,7 +9,7 @@ const createControllerQs = [
     name: 'controllerType',
     message: 'Controller type: ',
     choices: [
-      'Plain (Sample controller with 2 routes)',
+      'Plain (Sample controller with 4 routes)',
       'Custom routes'
     ]
   }
