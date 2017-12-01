@@ -202,7 +202,7 @@ actions.addRoutes = (controllerName,routes) => {
     fullControllerName = controllerName+'Controller';
   }
   if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
-    console.log(config.terminal_colors.red,"✖ Controller with that name doesn't exist, please chect /rest/controllers and provide an existing controller.");
+    console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect /rest/controllers and provide an existing controller.");
     console.log(config.terminal_colors.white);
     return;
   }
