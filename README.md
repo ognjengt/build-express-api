@@ -44,7 +44,7 @@ $ build-express-api create-controller
 ```
 The CLI will now take you through series of questions, the example of building a new controller would be:
 
-![Creating a plain controller](https://github.com/ognjengt/build-express-api/blob/master/assets/createControllerPlain.JPG)
+![Creating a plain controller](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/createControllerPlain.JPG)
 
 You can choose the **plain controller** or **custom routes** controller from the menu.
 
@@ -52,7 +52,7 @@ You can choose the **plain controller** or **custom routes** controller from the
 
 **Custom routes** controller allows you to manually add your routes, the example of building custom routes controller would be:
 
-![Creating a custom routes controller](https://github.com/ognjengt/build-express-api/blob/master/assets/customControllerCreation.JPG)
+![Creating a custom routes controller](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/customControllerCreation.JPG)
 
 **Note:** *make sure that you write the routes in the correct (strict JSON) format such as:*
 
@@ -68,7 +68,7 @@ $ build-express-api add-routes <controllerName>
 ```
 Example:
 
-![Adding routes to a controller](https://github.com/ognjengt/build-express-api/blob/master/assets/addRoutesComplete.JPG)
+![Adding routes to a controller](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/addRoutesComplete.JPG)
 
 ## Creating new model
 ```sh
@@ -76,7 +76,7 @@ $ build-express-api create-model
 ```
 Example:
 
-![Creating new model](https://github.com/ognjengt/build-express-api/blob/master/assets/createModelSuccess.JPG)
+![Creating new model](https://raw.githubusercontent.com/ognjengt/build-express-api/master/assets/createModelSuccess.JPG)
 
 **Note:** *When creating new model, you don't need to provide the properties in strict JSON format, just separate them with the comma*
 
