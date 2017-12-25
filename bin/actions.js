@@ -1,7 +1,7 @@
 // Implementations of actions
-const fs                   = require('fs');
-const config               = require('./config');
-const { getInstalledPathSync } = require('get-installed-path');
+const fs                        = require('fs');
+const config                    = require('./config');
+const { getInstalledPathSync }  = require('get-installed-path');
 
 var actions = {};
 
@@ -39,10 +39,12 @@ actions.init = () => {
     console.log(config.terminal_colors.green,'✔ Initialization successful');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white,'Please do not change the name of the directories and files created by this cli, as this cli needs those directory names to know where to create models, controllers and more.');
+    return true;
   }
   else {
     console.log(config.terminal_colors.red,"✖ Directory 'rest' already exists."); 
     console.log(config.terminal_colors.white);
+    return false;
   }
 }
 
@@ -102,10 +104,12 @@ actions.createPlainController = (controllerName) => {
     console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
+    return true;
   }
   else {
     console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
     console.log(config.terminal_colors.white);
+    return false;
   }
 
 }

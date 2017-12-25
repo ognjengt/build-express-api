@@ -6,10 +6,18 @@
   "preferGlobal": true,
   "bin": "./bin/cli.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha || true"
   },
   "keywords": [
-    "express", "api", "node", "node.js", "express.js", "rest", "cli", "build-express-api", "express-api"
+    "express",
+    "api",
+    "node",
+    "node.js",
+    "express.js",
+    "rest",
+    "cli",
+    "build-express-api",
+    "express-api"
   ],
   "repository": {
     "type": "git",
@@ -25,5 +33,10 @@
     "commander": "^2.12.1",
     "get-installed-path": "^4.0.8",
     "inquirer": "^4.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-fs": "^2.0.0",
+    "mocha": "^4.0.1"
   }
 }
