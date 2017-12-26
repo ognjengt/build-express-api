@@ -3,8 +3,6 @@ sudo: false
 node_js:
   - "8.0"
   - "6.0"
-  - "4.1"
-  - "4.0"
 install:
   - npm install -g build-express-api
   - npm install
