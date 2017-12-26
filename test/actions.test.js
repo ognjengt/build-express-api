@@ -3,8 +3,10 @@ const actions = require('../bin/actions');
 const fs      = require('fs');
 var chai      = require('chai');
 var expect = chai.expect;
+const { getInstalledPathSync }  = require('get-installed-path');
 
 chai.use(require('chai-fs'));
+var globalModulePath = getInstalledPathSync('build-express-api');
 
 const controllerName1 = 'test';
 const controllerName2 = 'test1Controller';
@@ -61,7 +63,7 @@ describe('Actions',function() {
     })
 
     it('Server.js should match the serverTemplate.js',function() {
-      let serverTemplate = fs.readFileSync('./templates/serverTemplate.js').toString();
+      let serverTemplate = fs.readFileSync(globalModulePath+'/templates/serverTemplate.js').toString();
 
       let createdServer = fs.readFileSync('./rest/server.js').toString();
 
@@ -98,7 +100,7 @@ describe('Actions',function() {
       let pathToController = './rest/controllers/'+controllerName3+'Controller.js';
 
       let controllerContents = fs.readFileSync(pathToController).toString();
-      let templateContents = fs.readFileSync('./templates/plainControllerTemplate.js').toString();
+      let templateContents = fs.readFileSync(globalModulePath+'/templates/plainControllerTemplate.js').toString();
       let expectedContents = templateContents.toString().replace(new RegExp('{{controllerName}}','g'), controllerName3);
 
       assert.equal(controllerContents,expectedContents);
@@ -252,7 +254,7 @@ describe('Actions',function() {
       let pathToModel = './rest/models/'+modelName3+'.js';
 
       let modelContents = fs.readFileSync(pathToModel).toString();
-      let templateContents = fs.readFileSync('./templates/modelTemplate.js').toString();
+      let templateContents = fs.readFileSync(globalModulePath+'/templates/modelTemplate.js').toString();
       let expectedContents = templateContents.toString().replace(new RegExp('modelname','g'), modelName3);
 
       let props = model1Props;
