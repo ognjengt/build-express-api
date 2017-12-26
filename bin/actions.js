@@ -186,10 +186,12 @@ module.exports = router;
     console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
+    return true;
   }
   else {
     console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
     console.log(config.terminal_colors.white);
+    return false;
   }
 
 }
@@ -208,7 +210,7 @@ actions.addRoutes = (controllerName,routes) => {
   if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
     console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect /rest/controllers and provide an existing controller.");
     console.log(config.terminal_colors.white);
-    return;
+    return false;
   }
 
   var routesString = '';
@@ -242,6 +244,7 @@ actions.addRoutes = (controllerName,routes) => {
   console.log(config.terminal_colors.green,'✔ Routes added successfully, check rest/controllers/'+fullControllerName+'.js');
   console.log(config.terminal_colors.green,'----------------------------');
   console.log(config.terminal_colors.white);
+  return true;
 }
 
 /**
@@ -254,14 +257,14 @@ actions.createModel = (name,props) => {
   if(!fs.existsSync('./rest/models')) {
     console.log(config.terminal_colors.red,"✖ Missing directory rest/models, please run build-express-api init, before adding a new model");
     console.log(config.terminal_colors.white);
-    return;
+    return false;
   }
   name = name.charAt(0).toUpperCase() + name.slice(1);
 
   if (fs.existsSync('./rest/models/'+name+'.js')) {
     console.log(config.terminal_colors.red,"✖ Model with that name already exists.");
     console.log(config.terminal_colors.white);
-    return;
+    return false;
   }
 
   var modelTemplateText = fs.readFileSync(globalModulePath+'/templates/modelTemplate.js').toString();
@@ -277,6 +280,7 @@ actions.createModel = (name,props) => {
   console.log(config.terminal_colors.green,'✔ Model '+name+' created successfully, check rest/models/'+name+'.js');
   console.log(config.terminal_colors.green,'----------------------------');
   console.log(config.terminal_colors.white);
+  return true;
 }
 
 module.exports = actions;

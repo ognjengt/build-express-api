@@ -14,12 +14,20 @@ const controllerName5 = 'test4';
 
 const customRoutesControllerName1 = 'customTest';
 const customRoutesControllerName2 = 'customTest1Controller';
-const customRoutesControllerName3 = 'customTes2';
-const customRoutesControllerName4 = 'customTes3';
-const customRoutesControllerName5 = 'customTes4';
+const customRoutesControllerName3 = 'customTest2';
+const customRoutesControllerName4 = 'customTest3';
+const customRoutesControllerName5 = 'customtest4';
 
 const customRoutes1 = '{"route1":"GET","route2":"POST"}';
 const customRoutes2 = '{"route1":"POST","route2":"GET","route3":"gEt","route4":"pOsT","route5":"get","route6":"post"}';
+
+const unExistingController = 'test150';
+const addRoutes1 = '{"addRoute1":"GET","addRoute2":"POST"}';
+
+const modelName1 = 'Testmodel';
+const modelName2 = 'Testmodel1';
+
+const model1Props = 'prop1: String, prop2: Boolean, prop3: Number';
 
 describe('Actions',function() {
   /**
@@ -27,7 +35,7 @@ describe('Actions',function() {
    * [✔️] Should create folder structure if it does not exist
    * [✔️] Server.js should match serverTemplate
    */
-  describe('actions.init', function() {
+  describe('actions.init tests', function() {
     it('should return true if folder structure does not exist', function() {
       if(!fs.existsSync('./rest')) {
         let result = actions.init();
@@ -66,7 +74,7 @@ describe('Actions',function() {
    * [✔️] Does not create a controller if it already exists
    * [✔️] Server.js implements controller settings
    */
-  describe('actions.createPlainController', function() {
+  describe('actions.createPlainController tests', function() {
     it('should create plain controller in ./rest/controllers/',function() {
       let result = actions.createPlainController(controllerName1);
       let pathToController = './rest/controllers/'+controllerName1+'Controller.js';
@@ -116,11 +124,11 @@ describe('Actions',function() {
   /**
    * [✔️] Should create a controller inside './rest/controllers/'
    * [✔️] Creates a controller if the controller name contains the word 'Controller'
-   * [] Controller contains the required routes
-   * [] Does not create a controller if it already exists
-   * [] Server.js implements controller settings
+   * [✔️] Controller contains the required routes
+   * [✔️] Does not create a controller if it already exists
+   * [✔️] Server.js implements controller settings
    */
-  describe('actions.createControllerWithCustomRoutes',function() {
+  describe('actions.createControllerWithCustomRoutes tests',function() {
     it('should create a controller in ./rest/controllers/',function() {
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName1,JSON.parse(customRoutes1));
       let pathToController = './rest/controllers/'+customRoutesControllerName1+'Controller.js';
@@ -137,10 +145,114 @@ describe('Actions',function() {
       assert.pathExists(pathToController);
     })
 
-    it('should contain the routes provided', function() {
-      
+    it('should properly contain the routes provided', function() {
+      let parsed = JSON.parse(customRoutes2);
+      let result = actions.createControllerWithCustomRoutes(customRoutesControllerName3, parsed);
+      let pathToController = './rest/controllers/'+customRoutesControllerName3+'Controller.js';
+
+      let controllerContents = fs.readFileSync(pathToController).toString();
+      let containsAll = true;
+      let routesString = '';
+            // Go through all of the routes and create them
+      for(let prop in parsed) {
+        let lowercaseProp = prop.toLowerCase();
+        let lowercaseMethod = parsed[prop].toLowerCase();
+
+        routesString = `router.${lowercaseMethod}('/${lowercaseProp}',(req,res)`;
+        if (!controllerContents.includes(routesString)) {
+          containsAll = false; break;
+        }
+
+      }
+
+      assert.equal(containsAll,true);
+    })
+
+    it('should not create a controller if it already exists',function() {
+      let firstCreation = actions.createControllerWithCustomRoutes(customRoutesControllerName4,JSON.parse(customRoutes1));
+      let secondCreation = actions.createControllerWithCustomRoutes(customRoutesControllerName4,JSON.parse(customRoutes1));
+
+      assert.equal(secondCreation,false);
+    })
+
+    it('Server.js should contain controller that was created',function() {
+      let result = actions.createControllerWithCustomRoutes(customRoutesControllerName5, JSON.parse(customRoutes1));
+
+      let serverContents = fs.readFileSync('./rest/server.js').toString();
+      let includes1 = serverContents.includes(`var ${customRoutesControllerName5}Controller = require('./controllers/${customRoutesControllerName5}Controller');`);
+      let includes2 = serverContents.includes(`app.use('/api/${customRoutesControllerName5}', ${customRoutesControllerName5}Controller);`);
+
+      assert.equal(includes1,true);
+      assert.equal(includes2,true);
     })
     
+  })
+
+  /**
+   * [✔️] Provided controller contains the provided routes
+   * [✔️] Does not create routes if the provided controller does not exist
+   * 
+   */
+  describe('actions.addRoutes tests', function() {
+
+    it('should add the provided routes to the provided controller', function() {
+      let parsed = JSON.parse(addRoutes1);
+      let result = actions.addRoutes(controllerName1,parsed);
+      let controllerContents = fs.readFileSync('./rest/controllers/'+controllerName1+'Controller.js');
+
+      let containsAll = true;
+      let routesString = '';
+            // Go through all of the routes and create them
+      for(let prop in parsed) {
+        let lowercaseProp = prop.toLowerCase();
+        let lowercaseMethod = parsed[prop].toLowerCase();
+
+        routesString = `router.${lowercaseMethod}('/${lowercaseProp}',(req,res)`;
+        if (!controllerContents.includes(routesString)) {
+          containsAll = false; break;
+        }
+
+      }
+      assert.equal(containsAll,true);
+    })
+
+    it('should not add routes to unexisting controller', function() {
+      let result = actions.addRoutes(unExistingController,JSON.parse(addRoutes1));
+      assert.equal(result,false);
+    })
+  })
+
+  /**
+   * [✔️] Should create a model in ./rest/models and return true
+   * [✔️] Should not create a model if the model with the same name already exists
+   * [] Should match the modelTemplate.js
+   * [] Should contain all of the properties
+   */
+  describe('actions.createModel',function() {
+
+    it('should create a model in ./rest/models and return true', function() {
+      let result = actions.createModel(modelName1,model1Props);
+      let pathToModel = './rest/models/'+modelName1+'.js';
+
+      expect(pathToModel).to.be.a.path();
+      assert.pathExists(pathToModel);
+      assert.equal(result,true);
+    })
+
+    it('should not create a model if the model with the same name already exists', function() {
+      let firstCreation = actions.createModel(modelName2,model1Props);
+      let secondCreation = actions.createModel(modelName2,model1Props);
+
+      assert.equal(secondCreation,false);
+    })
+
+    it('should match the modelTemplate.js', function() {
+      assert.equal(false,true);
+    })
+
+    it('should contain all of the passed props', function() {
+      assert.equal(false,true);
+    })
   })
 
 })
