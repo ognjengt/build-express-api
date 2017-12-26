@@ -14,10 +14,10 @@ const controllerName3 = 'test2';
 const controllerName4 = 'test3';
 const controllerName5 = 'test4';
 
-const customRoutesControllerName1 = 'customTest';
+const customRoutesControllerName1 = 'customtest';
 const customRoutesControllerName2 = 'customTest1Controller';
-const customRoutesControllerName3 = 'customTest2';
-const customRoutesControllerName4 = 'customTest3';
+const customRoutesControllerName3 = 'customtest2';
+const customRoutesControllerName4 = 'customtest3';
 const customRoutesControllerName5 = 'customtest4';
 
 const customRoutes1 = '{"route1":"GET","route2":"POST"}';
