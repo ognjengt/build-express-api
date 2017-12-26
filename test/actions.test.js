@@ -26,6 +26,8 @@ const addRoutes1 = '{"addRoute1":"GET","addRoute2":"POST"}';
 
 const modelName1 = 'Testmodel';
 const modelName2 = 'Testmodel1';
+const modelName3 = 'Testmodel2';
+const modelName4 = 'Testmodel3';
 
 const model1Props = 'prop1: String, prop2: Boolean, prop3: Number';
 
@@ -225,8 +227,7 @@ describe('Actions',function() {
   /**
    * [✔️] Should create a model in ./rest/models and return true
    * [✔️] Should not create a model if the model with the same name already exists
-   * [] Should match the modelTemplate.js
-   * [] Should contain all of the properties
+   * [✔️] Should match the modelTemplate.js and should contain all of the properties
    */
   describe('actions.createModel',function() {
 
@@ -246,12 +247,23 @@ describe('Actions',function() {
       assert.equal(secondCreation,false);
     })
 
-    it('should match the modelTemplate.js', function() {
-      assert.equal(false,true);
-    })
+    it('should match the modelTemplate.js and should contain all of the properties', function() {
+      let result = actions.createModel(modelName3,model1Props);
+      let pathToModel = './rest/models/'+modelName3+'.js';
 
-    it('should contain all of the passed props', function() {
-      assert.equal(false,true);
+      let modelContents = fs.readFileSync(pathToModel).toString();
+      let templateContents = fs.readFileSync('./templates/modelTemplate.js').toString();
+      let expectedContents = templateContents.toString().replace(new RegExp('modelname','g'), modelName3);
+
+      let props = model1Props;
+
+      props = props.replace(new RegExp(',', 'g'), ',\n ');
+      props = props.replace(new RegExp('{', 'g'), '{\n   ');
+      props = props.replace(new RegExp('}', 'g'), '\n }');
+      expectedContents = expectedContents.replace('PROPS',props);
+
+
+      assert.equal(modelContents,expectedContents);
     })
   })
 
