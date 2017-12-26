@@ -2,7 +2,9 @@
 A Command line interface for instantly building an express rest api. <br>
 Create controllers, models and add routes in matter of seconds.
 
+[![Build Status](https://travis-ci.org/ognjengt/build-express-api.svg?branch=master)](https://travis-ci.org/ognjengt/build-express-api)
 [![npm version](https://badge.fury.io/js/build-express-api.svg)](https://badge.fury.io/js/build-express-api)
+
 
 *This CLI only supports Node 6 and over.*
 
