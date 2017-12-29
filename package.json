@@ -1,6 +1,6 @@
 {
   "name": "build-express-api",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Command line interface for instantly building an express rest api",
   "main": "./bin/cli.js",
   "preferGlobal": true,

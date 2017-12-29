@@ -131,7 +131,7 @@ describe('Actions',function() {
   })
 
   /**
-   * [✔️] Should create a controller inside './rest/controllers/'
+   * [✔️] Should create a controller inside 'beaConfig.modelsPath'
    * [✔️] Creates a controller if the controller name contains the word 'Controller'
    * [✔️] Controller contains the required routes
    * [✔️] Does not create a controller if it already exists
@@ -240,7 +240,7 @@ describe('Actions',function() {
   })
 
   /**
-   * [✔️] Should create a model in ./rest/models and return true
+   * [✔️] Should create a model in beaConfig.modelsPath and return true
    * [✔️] Should not create a model if the model with the same name already exists
    * [✔️] Should match the modelTemplate.js and should contain all of the properties
    */
@@ -282,6 +282,37 @@ describe('Actions',function() {
 
 
       assert.equal(modelContents,expectedContents);
+    })
+  })
+
+  /**
+   * [✔️] Should create beaConfig.json
+   * [✔️] Should not create beaConfig.json if it already exists
+   * [✔️] Should be identical with configTemplate.json
+   */
+  describe('actions.createConfig',function() {
+
+    it('should create beaConfig.json in root directory, if it doesnt exist', function() {
+      let result = actions.createConfig();
+
+      expect('./beaConfig.json').to.be.a.path();
+      assert.pathExists('./beaConfig.json');
+    })
+
+    it('should not create beaConfig.json if it already exists', function() {
+      let result1 = actions.createConfig();
+      let result2 = actions.createConfig();
+
+      assert.equal(result2,false);
+    })
+
+    it('beaConfig.json should match templates/configTemplate.json', function() {
+      let result = actions.createConfig();
+
+      let configFileContents = fs.readFileSync('./beaConfig.json').toString();
+      let expectedContents = fs.readFileSync(globalModulePath+'/templates/configTemplate.json').toString();
+
+      assert.equal(configFileContents,expectedContents);
     })
   })
 

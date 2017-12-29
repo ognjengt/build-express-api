@@ -293,4 +293,11 @@ actions.createModel = (name,props) => {
   return true;
 }
 
+/**
+ * Creates beaConfig.json in root directory
+ */
+actions.createConfig = () => {
+  return helpers.createBeaConfig();
+}
+
 module.exports = actions;
