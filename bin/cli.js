@@ -23,7 +23,7 @@ program
 program
   .command('create-controller')
   .alias('cc')
-  .description('Creates a new api controller in rest/controllers/')
+  .description('Creates a new api controller in the directory specified in the beaConfig.json')
   .action(() => {
     prompt(questions.createControllerQs).then(answers => {
       if(answers.controllerType == 'Custom routes') {
@@ -35,6 +35,7 @@ program
     });
   })
 
+// Add routes
 program
   .command('add-routes <controllerName>')
   .alias('ar')
@@ -43,12 +44,21 @@ program
     prompt(questions.customRouteQs).then(answer => actions.addRoutes(controllerName,JSON.parse(answer.customRoutes)));
   })
 
+// Create model
 program
   .command('create-model')
   .alias('cm')
-  .description('Creates new model in rest/models')
+  .description('Creates new model in the directory specified in the beaConfig.json')
   .action(() => {
     prompt(questions.createModelQs).then(answers => actions.createModel(answers.modelName, answers.modelProps));
+  })
+
+program
+  .command('create-config')
+  .alias('cconfig')
+  .description('Creates a beaConfig.json file in the root directory. Use this file to tell the CLI where to create controllers and models')
+  .action(() => {
+    actions.createConfig();
   })
 
 
