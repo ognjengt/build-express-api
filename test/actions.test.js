@@ -1,5 +1,6 @@
 const assert  = require('chai').assert;
 const actions = require('../bin/actions');
+const helpers = require('../bin/helpers');
 const fs      = require('fs');
 var chai      = require('chai');
 var expect = chai.expect;
@@ -72,24 +73,28 @@ describe('Actions',function() {
   })
   /**
    * Test the createPlainController to:
-   * [✔️] Creates a controller inside ./rest/controllers 
+   * [✔️] Creates a controller inside beaConfig.controllersPath
    * [✔️] Creates a controller if the controller name contains the word 'Controller'
    * [✔️] Controller contains the required template
    * [✔️] Does not create a controller if it already exists
    * [✔️] Server.js implements controller settings
    */
   describe('actions.createPlainController tests', function() {
-    it('should create plain controller in ./rest/controllers/',function() {
+    // Setup
+    helpers.createBeaConfig();
+    let beaConfig = helpers.loadBeaConfig();
+
+    it('should create plain controller in '+beaConfig.controllersPath,function() {
       let result = actions.createPlainController(controllerName1);
-      let pathToController = './rest/controllers/'+controllerName1+'Controller.js';
+      let pathToController = beaConfig.controllersPath+'/'+controllerName1+'Controller.js';
 
       expect(pathToController).to.be.a.path();
       assert.pathExists(pathToController);
     })
 
-    it('should create plain controller in ./rest/controllers/ if the controller name contains the word `Controller`', function() {
+    it('should create plain controller in '+beaConfig.controllersPath+' if the controller name contains the word `Controller`', function() {
       let result = actions.createPlainController(controllerName2);
-      let pathToController = './rest/controllers/'+controllerName2+'.js';
+      let pathToController = beaConfig.controllersPath+'/'+controllerName2+'.js';
 
       expect(pathToController).to.be.a.path();
       assert.pathExists(pathToController);
@@ -97,7 +102,7 @@ describe('Actions',function() {
 
     it('should contain required template',function() {
       let result = actions.createPlainController(controllerName3);
-      let pathToController = './rest/controllers/'+controllerName3+'Controller.js';
+      let pathToController = beaConfig.controllersPath+'/'+controllerName3+'Controller.js';
 
       let controllerContents = fs.readFileSync(pathToController).toString();
       let templateContents = fs.readFileSync(globalModulePath+'/templates/plainControllerTemplate.js').toString();
@@ -116,7 +121,7 @@ describe('Actions',function() {
     it('Server.js should contain controller that was created',function() {
       let result = actions.createPlainController(controllerName5);
 
-      let serverContents = fs.readFileSync('./rest/server.js').toString();
+      let serverContents = fs.readFileSync(beaConfig.serverPath).toString();
       let includes1 = serverContents.includes(`var ${controllerName5}Controller = require('./controllers/${controllerName5}Controller');`);
       let includes2 = serverContents.includes(`app.use('/api/${controllerName5}', ${controllerName5}Controller);`);
 
@@ -133,17 +138,21 @@ describe('Actions',function() {
    * [✔️] Server.js implements controller settings
    */
   describe('actions.createControllerWithCustomRoutes tests',function() {
-    it('should create a controller in ./rest/controllers/',function() {
+    // Setup
+    helpers.createBeaConfig();
+    let beaConfig = helpers.loadBeaConfig();
+
+    it('should create a controller in '+beaConfig.controllersPath,function() {
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName1,JSON.parse(customRoutes1));
-      let pathToController = './rest/controllers/'+customRoutesControllerName1+'Controller.js';
+      let pathToController = beaConfig.controllersPath+'/'+customRoutesControllerName1+'Controller.js';
 
       expect(pathToController).to.be.a.path();
       assert.pathExists(pathToController);
     })
 
-    it('should create a custom routes controller in ./rest/controllers/ if the controller name contains the word `Controller`', function() {
+    it('should create a custom routes controller in '+beaConfig.controllersPath+' if the controller name contains the word `Controller`', function() {
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName2,JSON.parse(customRoutes1));
-      let pathToController = './rest/controllers/'+customRoutesControllerName2+'.js';
+      let pathToController = beaConfig.controllersPath+'/'+customRoutesControllerName2+'.js';
 
       expect(pathToController).to.be.a.path();
       assert.pathExists(pathToController);
@@ -152,7 +161,7 @@ describe('Actions',function() {
     it('should properly contain the routes provided', function() {
       let parsed = JSON.parse(customRoutes2);
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName3, parsed);
-      let pathToController = './rest/controllers/'+customRoutesControllerName3+'Controller.js';
+      let pathToController = beaConfig.controllersPath+'/'+customRoutesControllerName3+'Controller.js';
 
       let controllerContents = fs.readFileSync(pathToController).toString();
       let containsAll = true;
@@ -182,7 +191,7 @@ describe('Actions',function() {
     it('Server.js should contain controller that was created',function() {
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName5, JSON.parse(customRoutes1));
 
-      let serverContents = fs.readFileSync('./rest/server.js').toString();
+      let serverContents = fs.readFileSync(beaConfig.serverPath).toString();
       let includes1 = serverContents.includes(`var ${customRoutesControllerName5}Controller = require('./controllers/${customRoutesControllerName5}Controller');`);
       let includes2 = serverContents.includes(`app.use('/api/${customRoutesControllerName5}', ${customRoutesControllerName5}Controller);`);
 
@@ -199,10 +208,14 @@ describe('Actions',function() {
    */
   describe('actions.addRoutes tests', function() {
 
+    // Setup
+    helpers.createBeaConfig();
+    let beaConfig = helpers.loadBeaConfig();
+
     it('should add the provided routes to the provided controller', function() {
       let parsed = JSON.parse(addRoutes1);
       let result = actions.addRoutes(controllerName1,parsed);
-      let controllerContents = fs.readFileSync('./rest/controllers/'+controllerName1+'Controller.js');
+      let controllerContents = fs.readFileSync(beaConfig.controllersPath+'/'+controllerName1+'Controller.js');
 
       let containsAll = true;
       let routesString = '';
@@ -232,10 +245,13 @@ describe('Actions',function() {
    * [✔️] Should match the modelTemplate.js and should contain all of the properties
    */
   describe('actions.createModel',function() {
+    // Setup
+    helpers.createBeaConfig();
+    let beaConfig = helpers.loadBeaConfig();
 
-    it('should create a model in ./rest/models and return true', function() {
+    it('should create a model in '+beaConfig.modelsPath+' and return true', function() {
       let result = actions.createModel(modelName1,model1Props);
-      let pathToModel = './rest/models/'+modelName1+'.js';
+      let pathToModel = beaConfig.modelsPath+'/'+modelName1+'.js';
 
       expect(pathToModel).to.be.a.path();
       assert.pathExists(pathToModel);
@@ -251,7 +267,7 @@ describe('Actions',function() {
 
     it('should match the modelTemplate.js and should contain all of the properties', function() {
       let result = actions.createModel(modelName3,model1Props);
-      let pathToModel = './rest/models/'+modelName3+'.js';
+      let pathToModel = beaConfig.modelsPath+'/'+modelName3+'.js';
 
       let modelContents = fs.readFileSync(pathToModel).toString();
       let templateContents = fs.readFileSync(globalModulePath+'/templates/modelTemplate.js').toString();

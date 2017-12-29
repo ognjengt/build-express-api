@@ -30,7 +30,7 @@ actions.init = () => {
 
     fs.writeFileSync('./rest/server.js',serverText);
 
-    //helpers.createConfig();
+    helpers.createBeaConfig();
   }
   else initSuccessful = false;
 
@@ -39,7 +39,8 @@ actions.init = () => {
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.green,'✔ Initialization successful');
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.white,'Please do not change the name of the directories and files created by this cli, as this cli needs those directory names to know where to create models, controllers and more.');
+    // console.log(config.terminal_colors.white,'Please do not change the name of the directories and files created by this cli, as this cli needs those directory names to know where to create models, controllers and more.');
+    console.log(config.terminal_colors.white, 'Please check beaConfig.js if you want a different folder structure, provide the path to the server.js/app.js, controllers/routes folder and models folder.');
     return true;
   }
   else {
@@ -54,10 +55,11 @@ actions.init = () => {
  * @param {*String} controllerName 
  */
 actions.createPlainController = (controllerName) => {
-
+  // First load the config file to know where to create controllers
+  var beaConfig = helpers.loadBeaConfig();
   // If /rest/controllers doesn't exist return
-  if(!fs.existsSync('./rest/controllers')) {
-    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a new controller");
+  if(!fs.existsSync(beaConfig.controllersPath)) {
+    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please run build-express-api init, before adding a new controller");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -70,7 +72,7 @@ actions.createPlainController = (controllerName) => {
   } else fullControllerName = controllerName;
 
   // Only create controller if it doesn't exist already
-  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
+  if(!fs.existsSync(beaConfig.controllersPath+'/'+fullControllerName+'.js')) {
     var plainControllerText = fs.readFileSync(globalModulePath+'/templates/plainControllerTemplate.js');
     
     // get plain controller name eg foodController -> food
@@ -79,10 +81,10 @@ actions.createPlainController = (controllerName) => {
     plainControllerText = plainControllerText.toString().replace(new RegExp('{{controllerName}}','g'), routeName);
 
     // Create controller
-    fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',plainControllerText);
+    fs.writeFileSync(beaConfig.controllersPath+'/'+fullControllerName+'.js',plainControllerText);
 
     // Use this controller in server.js
-    var serverText = fs.readFileSync('./rest/server.js').toString();
+    var serverText = fs.readFileSync(beaConfig.serverPath).toString();
     var arrayOfLines = serverText.split("\n");
     var index;
     arrayOfLines.forEach((line,i) => {
@@ -95,14 +97,14 @@ actions.createPlainController = (controllerName) => {
     arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"', "+fullControllerName+");");
 
     var newServerText = arrayOfLines.join('\n');
-    fs.writeFileSync('./rest/server.js',newServerText);
+    fs.writeFileSync(beaConfig.serverPath,newServerText);
 
   }
   else success = false;
 
   if(success) {
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check '+beaConfig.serverPath+'/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
     return true;
@@ -121,8 +123,11 @@ actions.createPlainController = (controllerName) => {
  * @param {*Object} routes 
  */
 actions.createControllerWithCustomRoutes = (controllerName, routes) => {
-  if(!fs.existsSync('./rest/controllers')) {
-    console.log(config.terminal_colors.red,"✖ Missing directory rest/controllers, please run build-express-api init, before adding a new controller");
+  // First load the config file to know where to create controllers
+  var beaConfig = helpers.loadBeaConfig();
+  
+  if(!fs.existsSync(beaConfig.controllersPath)) {
+    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please run build-express-api init, before adding a new controller");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -135,7 +140,7 @@ actions.createControllerWithCustomRoutes = (controllerName, routes) => {
   } else fullControllerName = controllerName;
 
   // Only create controller if it doesn't exist already
-  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
+  if(!fs.existsSync(beaConfig.controllersPath+'/'+fullControllerName+'.js')) {
 
       var basicControllerName = fullControllerName.replace('Controller','');
       var routesString = '';
@@ -162,10 +167,10 @@ ${routesString}
 module.exports = router;
 `;
 
-      fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',routesControllerText);
+      fs.writeFileSync(beaConfig.controllersPath+'/'+fullControllerName+'.js',routesControllerText);
 
       // Use this controller in server.js
-      var serverText = fs.readFileSync('./rest/server.js').toString();
+      var serverText = fs.readFileSync(beaConfig.serverPath).toString();
       var arrayOfLines = serverText.split("\n");
       var index;
       arrayOfLines.forEach((line,i) => {
@@ -178,13 +183,13 @@ module.exports = router;
       arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"', "+fullControllerName+");");
   
       var newServerText = arrayOfLines.join('\n');
-      fs.writeFileSync('./rest/server.js',newServerText);
+      fs.writeFileSync(beaConfig.serverPath,newServerText);
   }
   else success = false;
 
   if(success) {
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check rest/controllers/'+fullControllerName+'.js');
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check '+beaConfig.controllersPath+'/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
     return true;
@@ -203,13 +208,15 @@ module.exports = router;
  * @param {*Object} routes 
  */
 actions.addRoutes = (controllerName,routes) => {
+  // First load the config file to know where to create controllers
+  var beaConfig = helpers.loadBeaConfig();
 
   var fullControllerName;
   if(!controllerName.includes('Controller')) {
     fullControllerName = controllerName+'Controller';
   }
-  if(!fs.existsSync('./rest/controllers/'+fullControllerName+'.js')) {
-    console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect /rest/controllers and provide an existing controller.");
+  if(!fs.existsSync(beaConfig.controllersPath+'/'+fullControllerName+'.js')) {
+    console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect "+beaConfig.controllersPath+" and provide an existing controller.");
     console.log(config.terminal_colors.white);
     return false;
   }
@@ -219,7 +226,7 @@ actions.addRoutes = (controllerName,routes) => {
 
   console.log(routesString);
   // Go through controller.js and add routes to the end
-  var controllerText = fs.readFileSync('./rest/controllers/'+fullControllerName+'.js').toString();
+  var controllerText = fs.readFileSync(beaConfig.controllersPath+'/'+fullControllerName+'.js').toString();
   var arrayOfLines = controllerText.split("\n");
   var index;
   arrayOfLines.forEach((line,i) => {
@@ -239,10 +246,10 @@ actions.addRoutes = (controllerName,routes) => {
     index++;
   }
   var newControllerText = arrayOfLines.join('\n');
-  fs.writeFileSync('./rest/controllers/'+fullControllerName+'.js',newControllerText);
+  fs.writeFileSync(beaConfig.controllersPath+'/'+fullControllerName+'.js',newControllerText);
   
   console.log(config.terminal_colors.green,'----------------------------');
-  console.log(config.terminal_colors.green,'✔ Routes added successfully, check rest/controllers/'+fullControllerName+'.js');
+  console.log(config.terminal_colors.green,'✔ Routes added successfully, check '+beaConfig.controllersPath+'/'+fullControllerName+'.js');
   console.log(config.terminal_colors.green,'----------------------------');
   console.log(config.terminal_colors.white);
   return true;
@@ -254,15 +261,18 @@ actions.addRoutes = (controllerName,routes) => {
  * @param {*String} props 
  */
 actions.createModel = (name,props) => {
+
+  // First load the config file to know where to create controllers
+  var beaConfig = helpers.loadBeaConfig();
   
-  if(!fs.existsSync('./rest/models')) {
-    console.log(config.terminal_colors.red,"✖ Missing directory rest/models, please run build-express-api init, before adding a new model");
+  if(!fs.existsSync(beaConfig.modelsPath)) {
+    console.log(config.terminal_colors.red,"✖ Missing directory"+beaConfig.modelsPath+", please run build-express-api init, before adding a new model");
     console.log(config.terminal_colors.white);
     return false;
   }
   name = name.charAt(0).toUpperCase() + name.slice(1);
 
-  if (fs.existsSync('./rest/models/'+name+'.js')) {
+  if (fs.existsSync(beaConfig.modelsPath+'/'+name+'.js')) {
     console.log(config.terminal_colors.red,"✖ Model with that name already exists.");
     console.log(config.terminal_colors.white);
     return false;
@@ -275,10 +285,10 @@ actions.createModel = (name,props) => {
   props = props.replace(new RegExp('}', 'g'), '\n }');
   modelTemplateText = modelTemplateText.replace('PROPS',props);
 
-  fs.writeFileSync('./rest/models/'+name+'.js',modelTemplateText);
+  fs.writeFileSync(beaConfig.modelsPath+'/'+name+'.js',modelTemplateText);
 
   console.log(config.terminal_colors.green,'----------------------------');
-  console.log(config.terminal_colors.green,'✔ Model '+name+' created successfully, check rest/models/'+name+'.js');
+  console.log(config.terminal_colors.green,'✔ Model '+name+' created successfully, check '+beaConfig.modelsPath+'/'+name+'.js');
   console.log(config.terminal_colors.green,'----------------------------');
   console.log(config.terminal_colors.white);
   return true;
