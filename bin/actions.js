@@ -2,6 +2,7 @@
 const fs                        = require('fs');
 const config                    = require('./config');
 const { getInstalledPathSync }  = require('get-installed-path');
+const helpers                   = require('./helpers');
 
 var actions = {};
 
@@ -29,7 +30,7 @@ actions.init = () => {
 
     fs.writeFileSync('./rest/server.js',serverText);
 
-    
+    //helpers.createConfig();
   }
   else initSuccessful = false;
 

@@ -1,0 +1,5 @@
+{
+  "serverPath": "./rest/server.js",
+  "controllersPath": "./rest/controllers",
+  "modelsPath": "./rest/models"
+}
