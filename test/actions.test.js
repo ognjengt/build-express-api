@@ -204,7 +204,7 @@ describe('Actions',function() {
   /**
    * [✔️] Provided controller contains the provided routes
    * [✔️] Does not create routes if the provided controller does not exist
-   * 
+   * [✔️] Should add routes when 'controllernameController' is passed ( contains the word Controller )
    */
   describe('actions.addRoutes tests', function() {
 
@@ -236,6 +236,27 @@ describe('Actions',function() {
     it('should not add routes to unexisting controller', function() {
       let result = actions.addRoutes(unExistingController,JSON.parse(addRoutes1));
       assert.equal(result,false);
+    })
+
+    it('should add routes when passed controller name contains the word `Controller`', function() {
+      let parsed = JSON.parse(addRoutes1);
+      let result = actions.addRoutes(controllerName2,parsed);
+      let controllerContents = fs.readFileSync(beaConfig.controllersPath+'/'+controllerName2+'.js');
+
+      let containsAll = true;
+      let routesString = '';
+            // Go through all of the routes and create them
+      for(let prop in parsed) {
+        let lowercaseProp = prop.toLowerCase();
+        let lowercaseMethod = parsed[prop].toLowerCase();
+
+        routesString = `router.${lowercaseMethod}('/${lowercaseProp}',(req,res)`;
+        if (!controllerContents.includes(routesString)) {
+          containsAll = false; break;
+        }
+
+      }
+      assert.equal(containsAll,true);
     })
   })
 

@@ -213,7 +213,8 @@ actions.addRoutes = (controllerName,routes) => {
   var fullControllerName;
   if(!controllerName.includes('Controller')) {
     fullControllerName = controllerName+'Controller';
-  }
+  } else fullControllerName = controllerName;
+  
   if(!fs.existsSync(beaConfig.controllersPath+'/'+fullControllerName+'.js')) {
     console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect "+beaConfig.controllersPath+" and provide an existing controller.");
     console.log(config.terminal_colors.white);
