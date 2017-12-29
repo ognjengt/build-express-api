@@ -214,7 +214,7 @@ actions.addRoutes = (controllerName,routes) => {
   if(!controllerName.includes('Controller')) {
     fullControllerName = controllerName+'Controller';
   } else fullControllerName = controllerName;
-  
+
   if(!fs.existsSync(beaConfig.controllersPath+'/'+fullControllerName+'.js')) {
     console.log(config.terminal_colors.red,"✖ Controller with that name ("+fullControllerName+") doesn't exist, please chect "+beaConfig.controllersPath+" and provide an existing controller.");
     console.log(config.terminal_colors.white);
@@ -298,7 +298,16 @@ actions.createModel = (name,props) => {
  * Creates beaConfig.json in root directory
  */
 actions.createConfig = () => {
-  return helpers.createBeaConfig();
+  var created = helpers.createBeaConfig();
+  if (!created) {
+    console.log(config.terminal_colors.red,"✖ beaConfig.json already exists");
+    console.log(config.terminal_colors.white);
+  }
+  else {
+    console.log(config.terminal_colors.green,'✔ Created beaConfig.json');
+    console.log(config.terminal_colors.white);
+  }
+  return created;
 }
 
 module.exports = actions;
