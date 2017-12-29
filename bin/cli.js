@@ -7,6 +7,7 @@ const questions   = require('./questions');
 
 program
   .version(config.cli_version)
+  .alias('v')
   .description('Command line interface for instantly building an express rest api')
 
 // Init

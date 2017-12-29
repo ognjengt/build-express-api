@@ -39,7 +39,6 @@ actions.init = () => {
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.green,'✔ Initialization successful');
     console.log(config.terminal_colors.green,'----------------------------');
-    // console.log(config.terminal_colors.white,'Please do not change the name of the directories and files created by this cli, as this cli needs those directory names to know where to create models, controllers and more.');
     console.log(config.terminal_colors.white, 'Please check beaConfig.js if you want a different folder structure, provide the path to the server.js/app.js, controllers/routes folder and models folder.');
     return true;
   }
@@ -59,7 +58,7 @@ actions.createPlainController = (controllerName) => {
   var beaConfig = helpers.loadBeaConfig();
   // If /rest/controllers doesn't exist return
   if(!fs.existsSync(beaConfig.controllersPath)) {
-    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please run build-express-api init, before adding a new controller");
+    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please check whether that directory exists.");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -93,7 +92,7 @@ actions.createPlainController = (controllerName) => {
       }
     })
     arrayOfLines.splice(++index,0,"\n");
-    arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
+    arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+beaConfig.controllersPath+"/"+fullControllerName+"');");
     arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"', "+fullControllerName+");");
 
     var newServerText = arrayOfLines.join('\n');
@@ -104,7 +103,7 @@ actions.createPlainController = (controllerName) => {
 
   if(success) {
     console.log(config.terminal_colors.green,'----------------------------');
-    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check '+beaConfig.serverPath+'/'+fullControllerName+'.js');
+    console.log(config.terminal_colors.green,'✔ '+fullControllerName+' created successfully, check '+beaConfig.controllersPath+'/'+fullControllerName+'.js');
     console.log(config.terminal_colors.green,'----------------------------');
     console.log(config.terminal_colors.white);
     return true;
@@ -127,7 +126,7 @@ actions.createControllerWithCustomRoutes = (controllerName, routes) => {
   var beaConfig = helpers.loadBeaConfig();
   
   if(!fs.existsSync(beaConfig.controllersPath)) {
-    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please run build-express-api init, before adding a new controller");
+    console.log(config.terminal_colors.red,"✖ Missing directory "+beaConfig.controllersPath+", please check whether that directory exists.");
     console.log(config.terminal_colors.white);
     return;
   }
@@ -179,7 +178,7 @@ module.exports = router;
         }
       })
       arrayOfLines.splice(++index,0,"\n");
-      arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('./controllers/"+fullControllerName+"');");
+      arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+beaConfig.controllersPath+"/"+fullControllerName+"');");
       arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"', "+fullControllerName+");");
   
       var newServerText = arrayOfLines.join('\n');
@@ -266,7 +265,7 @@ actions.createModel = (name,props) => {
   var beaConfig = helpers.loadBeaConfig();
   
   if(!fs.existsSync(beaConfig.modelsPath)) {
-    console.log(config.terminal_colors.red,"✖ Missing directory"+beaConfig.modelsPath+", please run build-express-api init, before adding a new model");
+    console.log(config.terminal_colors.red,"✖ Missing directory"+beaConfig.modelsPath+", please check whether that directory exists.");
     console.log(config.terminal_colors.white);
     return false;
   }

@@ -7,8 +7,7 @@ var helpers = {};
 
 helpers.createBeaConfig = () => {
   if (!fs.existsSync('./beaConfig.json')) {
-    // should change here to globalModulePath/templates when deployed
-    var packageJsonText = fs.readFileSync('./templates/configTemplate.json');
+    var packageJsonText = fs.readFileSync(globalModulePath+'/templates/configTemplate.json');
 
     fs.writeFileSync('beaConfig.json',packageJsonText);
     return true;

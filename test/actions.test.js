@@ -122,7 +122,7 @@ describe('Actions',function() {
       let result = actions.createPlainController(controllerName5);
 
       let serverContents = fs.readFileSync(beaConfig.serverPath).toString();
-      let includes1 = serverContents.includes(`var ${controllerName5}Controller = require('./controllers/${controllerName5}Controller');`);
+      let includes1 = serverContents.includes(`var ${controllerName5}Controller = require('${beaConfig.controllersPath}/${controllerName5}Controller');`);
       let includes2 = serverContents.includes(`app.use('/api/${controllerName5}', ${controllerName5}Controller);`);
 
       assert.equal(includes1,true);
@@ -166,7 +166,7 @@ describe('Actions',function() {
       let controllerContents = fs.readFileSync(pathToController).toString();
       let containsAll = true;
       let routesString = '';
-            // Go through all of the routes and create them
+      // Go through all of the routes and create them
       for(let prop in parsed) {
         let lowercaseProp = prop.toLowerCase();
         let lowercaseMethod = parsed[prop].toLowerCase();
@@ -192,7 +192,7 @@ describe('Actions',function() {
       let result = actions.createControllerWithCustomRoutes(customRoutesControllerName5, JSON.parse(customRoutes1));
 
       let serverContents = fs.readFileSync(beaConfig.serverPath).toString();
-      let includes1 = serverContents.includes(`var ${customRoutesControllerName5}Controller = require('./controllers/${customRoutesControllerName5}Controller');`);
+      let includes1 = serverContents.includes(`var ${customRoutesControllerName5}Controller = require('${beaConfig.controllersPath}/${customRoutesControllerName5}Controller');`);
       let includes2 = serverContents.includes(`app.use('/api/${customRoutesControllerName5}', ${customRoutesControllerName5}Controller);`);
 
       assert.equal(includes1,true);
