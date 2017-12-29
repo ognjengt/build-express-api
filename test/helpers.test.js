@@ -12,9 +12,8 @@ describe('Helpers', function() {
 
   /**
    * [✔️] Should create beaConfig.json
-   * [✔️] Should load beaConfig.json in JSON format and contains specific keys
    */
-  describe('helpers.createConfig', function() {
+  describe('helpers.createBeaConfig', function() {
 
     it('should create beaConfig.json', function() {
       let result = helpers.createBeaConfig();
@@ -22,6 +21,13 @@ describe('Helpers', function() {
       expect('./beaConfig.json').to.be.a.path();
       assert.pathExists('./beaConfig.json');
     })
+
+  })
+
+  /**
+   * [✔️] Should load beaConfig.json in JSON format and contains specific keys
+   */
+  describe('helpers.loadBeaConfig', function() {
 
     it('should load beaConfig.json in JSON format and contains specific keys',function() {
       let result = helpers.loadBeaConfig();
