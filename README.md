@@ -10,6 +10,7 @@ Create controllers, models and add routes in matter of seconds.
 
 * [Installation](#installation)
 * [Getting Started](#getting-started)
+* [Configuring CLI with active projects](#configuring-cli-with-active-projects)
 * [Creating a new controller](#creating-a-new-controller)
 * [Adding routes to a controller](#adding-routes-to-a-controller)
 * [Creating new model](#creating-new-model)
@@ -30,6 +31,7 @@ $ build-express-api init
 ```
 my-app
 ├── package.json
+├── beaConfig.json
 ├── rest
     └── controllers
     └── models
@@ -40,6 +42,31 @@ Install all the needed dependencies:
 $ npm install
 ```
 *Note: when running all of the further commands, please stay in the my-app directory*
+
+## Configuring CLI with active projects
+If you already started a project, and have a different application structure, no worries. <br>
+```sh
+$ build-express-api create-config
+```
+or
+```sh
+$ build-express-api cconfig
+```
+
+This command only creates a beaConfig.json file in the root directory, without creating a ./rest folder.<br>
+Use this file to configure the CLI on where to store the controllers, models, and where is the server.js or app.js file
+
+beaConfig.json initially looks like this
+```js
+{
+  "serverPath": "./rest/server.js",
+  "controllersPath": "./rest/controllers",
+  "modelsPath": "./rest/models"
+}
+```
+
+Configure the paths to your application, so the CLI knows how to execute the commands.
+
 ## Creating a new controller
 ```sh
 $ build-express-api create-controller
@@ -55,7 +82,7 @@ The CLI will now take you through series of questions, the example of building a
 
 You can choose the **plain controller** or **custom routes** controller from the menu.
 
-**Plain controller** just creates a controller with built in routes in rest/controllers/controllerName.js.
+**Plain controller** just creates a controller with built in routes in the path provided in beaConfig.json file.
 
 **Custom routes** controller allows you to manually add your routes, the example of building custom routes controller would be:
 
@@ -67,7 +94,7 @@ You can choose the **plain controller** or **custom routes** controller from the
 {"routeName":"METHOD"}
 ```
 
-When the controller is created it will automatically be imported in server.js file
+When the controller is created it will automatically be imported in the file provided in the beaConfig.json as the serverPath.
 
 ## Adding routes to a controller
 ```sh
