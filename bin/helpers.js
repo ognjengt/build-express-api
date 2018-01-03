@@ -9,7 +9,7 @@ helpers.createBeaConfig = () => {
   if (!fs.existsSync('./beaConfig.json')) {
     var configText = fs.readFileSync(globalModulePath+'/templates/configTemplate.json');
 
-    fs.writeFileSync('beaConfig.json',configText);
+    fs.writeFileSync('beaConfig.json', configText);
     return true;
   }
   return false;
