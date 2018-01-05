@@ -310,4 +310,22 @@ actions.createConfig = () => {
   return created;
 }
 
+actions.buildSchema = () => {
+  var schema = helpers.getProperty('schema');
+  if(!helpers.validateSchema(schema)) {
+    // Console log da sema nije validna
+
+    return;
+  }
+
+  // Za kontrolere:
+  // prodji kroz schema.controllers, sa foreachom
+  // ako je polje "routes" tipa string, i ako u njemu pise "plain" poziva se funkcija createPlainController i prosledjuje se to ime kao parametar
+
+  // ako je polje routes tipa objekat, poziva se funkcija createControllerWithCustomRoutes, i prosledjuje se naziv i routes objekat
+
+  // Za modele:
+  // prolazi se kroz svaki objekat i poziva se funkcija createModel i prosledjuje se name i props
+}
+
 module.exports = actions;

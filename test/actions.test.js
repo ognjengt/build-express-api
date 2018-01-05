@@ -309,7 +309,7 @@ describe('Actions',function() {
   /**
    * [✔️] Should create beaConfig.json
    * [✔️] Should not create beaConfig.json if it already exists
-   * [✔️] Should be identical with configTemplate.json
+   * [] Should contain the stuff, that configTemplate.json contains
    */
   describe('actions.createConfig',function() {
 
@@ -327,14 +327,22 @@ describe('Actions',function() {
       assert.equal(result2,false);
     })
 
-    it('beaConfig.json should match templates/configTemplate.json', function() {
-      let result = actions.createConfig();
+    // it('beaConfig.json should match templates/configTemplate.json', function() {
+    //   let result = actions.createConfig();
 
-      let configFileContents = fs.readFileSync('./beaConfig.json').toString();
-      let expectedContents = fs.readFileSync(globalModulePath+'/templates/configTemplate.json').toString();
+    //   let configFileContents = fs.readFileSync('./beaConfig.json').toString();
+    //   let expectedContents = fs.readFileSync(globalModulePath+'/templates/configTemplate.json').toString();
 
-      assert.equal(configFileContents,expectedContents);
-    })
+    //   expect(configFileContents).to.include(expectedContents);
+    // })
+  })
+
+  /**
+   * 
+   */
+  describe('actions.buildSchema', function() {
+    
+    
   })
 
 })

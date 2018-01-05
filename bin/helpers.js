@@ -20,4 +20,29 @@ helpers.loadBeaConfig = () => {
   return JSON.parse(config);
 }
 
+helpers.getProperty = (property) => {
+  var config = helpers.loadBeaConfig();
+  return config[property] || null;
+}
+
+helpers.validateSchema = (schema) => {
+  var validated = true;
+
+  if(schema == null) return false;
+
+  if(schema.controllers instanceof Array && schema.models instanceof Array) {
+    schema.controllers.forEach(function(controller) {
+      if(controller.name == "" || controller.name == null) {validated = false; return;}
+      if(controller.routes == "" || controller.routes == null) {validated = false; return;}
+    })
+    
+    schema.models.forEach(function(model) {
+      if(model.name == "" || model.name == null) {validated = false; return;}
+      if(model.props == "" || model.props == null) {validated = false; return;}
+    })
+  } else validated = false;
+  
+  return validated;
+}
+
 module.exports = helpers;
