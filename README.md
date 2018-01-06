@@ -126,6 +126,65 @@ Also models are not automatically imported in server.js, so you will need to imp
 
 This CLI supports only mongoose models for now.
 
+## Creating multiple controllers and models
+If you need to instantly create multiple controllers, and models, you will need to define a schema object in beaConfig.json file.
+When defining schema, it must be in a correct format.
+
+Example of beaConfig.json, with schema file:
+
+```js
+{
+  "serverPath": "./rest/server.js",
+  "controllersPath": "./rest/controllers",
+  "modelsPath": "./rest/models",
+  
+  "schema": {
+    "controllers": [
+      {
+        "name": "foo1",
+        "routes": "plain"
+      },
+      {
+        "name": "posts",
+        "routes": {
+          "getPosts": "GET",
+          "createNew": "POST"
+        }
+      }
+    ],
+    "models": [
+      {
+        "name": "User",
+        "props": "username: String, password: String"
+      },
+      {
+        "name": "Post",
+        "props": "title: String, properties: { isRead: Boolean, DateCreated: Date }"
+      }
+    ] 
+  }
+
+}
+```
+As you can see, the controllers and models objects are defined as an array of objects containing information about every controller and model.
+
+After the schema is defined, simply run
+```sh
+$ build-express-api build-schema
+```
+or
+```sh
+$ build-express-api bs
+```
+
+And the CLI will create all of the defined controllers, and models in the schema.
+
+When defining schema, if you want to create plain controller, simply set the routes field to "plain", and if you want to add routes to a specific controller, you must define them like in the example above.
+
+If you want to create only multiple controllers, just erase the models array. Same goes when creating only multiple models.
+
+### Notes
+
 **Note:** The experience this CLI provides does not work as smooth in Git Bash terminal, since it is not an interactive terminal, but if you are using Git Bash inside VS Code, then there are no problems, I found no complications using any other terminal.
 
 Feel free to post issues if you run into any.
