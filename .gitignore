@@ -2,6 +2,7 @@
 rest/
 notes.txt
 beaConfig.json
+.vscode/
 
 ### Node ###
 # Logs

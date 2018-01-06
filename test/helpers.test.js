@@ -2,48 +2,12 @@ const assert  = require('chai').assert;
 var helpers   = require('../bin/helpers');
 const fs      = require('fs');
 var chai      = require('chai');
+var setups    = require('./setups');
 var expect = chai.expect;
 const { getInstalledPathSync }  = require('get-installed-path');
 
 chai.use(require('chai-fs'));
 var globalModulePath = getInstalledPathSync('build-express-api');
-
-var configText = `{
-  "serverPath": "./rest/server.js",
-  "controllersPath": "./rest/controllers",
-  "modelsPath": "./rest/models",
-  
-  "schema": {
-    "controllers": [
-      {
-        "name": "controller1",
-        "routes": "plain"
-      },
-      {
-        "name": "controller2",
-        "routes": {
-          "getPosts": "GET",
-          "createNew": "POST"
-        }
-      }
-    ],
-    "models": [
-      {
-        "name": "User",
-        "props": "username: String, password: String"
-      },
-      {
-        "name": "Post",
-        "props": "title: String"
-      }
-    ] 
-  }
-
-}`
-
-function createTestConfig(configText) {
-  fs.writeFileSync('beaConfig.json', configText);
-}
 
 describe('Helpers', function() {
 
@@ -81,7 +45,7 @@ describe('Helpers', function() {
   describe('helpers.getProperty', function() {
 
     // Setup
-    createTestConfig(configText);
+   setups.createTestConfig(setups.configText);
 
     it('Should return property that is requested, if beaConfig.json contains the passed property key', function() {
       let result = helpers.getProperty('schema');
@@ -101,7 +65,7 @@ describe('Helpers', function() {
   describe('helpers.validateSchema', function() {
 
     // Setup
-    createTestConfig(configText);
+    setups.createTestConfig(setups.configText);
 
     it('For given property "schema" should return the value that is object, and contains controllers and models arrays', function() {
       let result = helpers.getProperty('schema');

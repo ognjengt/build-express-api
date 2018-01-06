@@ -313,19 +313,42 @@ actions.createConfig = () => {
 actions.buildSchema = () => {
   var schema = helpers.getProperty('schema');
   if(!helpers.validateSchema(schema)) {
-    // Console log da sema nije validna
 
-    return;
+    console.log(config.terminal_colors.red,"✖ Schema is not in valid format, please check beaConfig.json, or https://github.com/ognjengt/build-express-api documentation to see how to write schema in a correct format.");
+    console.log(config.terminal_colors.white);
+
+    return false;
   }
 
-  // Za kontrolere:
-  // prodji kroz schema.controllers, sa foreachom
-  // ako je polje "routes" tipa string, i ako u njemu pise "plain" poziva se funkcija createPlainController i prosledjuje se to ime kao parametar
+  var result = true;
 
-  // ako je polje routes tipa objekat, poziva se funkcija createControllerWithCustomRoutes, i prosledjuje se naziv i routes objekat
+  // Create controllers
+  schema.controllers.forEach(function(controller) {
+    if(controller.routes === "plain") {
+      actions.createPlainController(controller.name);
+    }
+    else if (controller.routes instanceof Object) {
+      actions.createControllerWithCustomRoutes(controller.name, controller.routes);
+    }
+    else {
+      console.log(config.terminal_colors.red,"✖ Schema is not in valid format, please check beaConfig.json, or https://github.com/ognjengt/build-express-api documentation to see how to write schema in a correct format. Additional message: Some controller routes aren't in correct format.");
+    console.log(config.terminal_colors.white);
 
-  // Za modele:
-  // prolazi se kroz svaki objekat i poziva se funkcija createModel i prosledjuje se name i props
+      result = false; 
+      return;
+    }
+  })
+
+  if (!result) {
+    return false;
+  }
+
+  // Create models
+  schema.models.forEach(function(model) {
+    actions.createModel(model.name, model.props);
+  })
+
+  return result;
 }
 
 module.exports = actions;

@@ -3,6 +3,7 @@ const actions = require('../bin/actions');
 const helpers = require('../bin/helpers');
 const fs      = require('fs');
 var chai      = require('chai');
+var setups    = require('./setups');
 var expect = chai.expect;
 const { getInstalledPathSync }  = require('get-installed-path');
 
@@ -338,11 +339,91 @@ describe('Actions',function() {
   })
 
   /**
-   * 
+   * [✔️] Should create all of the controllers in schema in the beaConfig.controllersPath location
+   * [✔️] Controllers should contain correct routes if they are customRoutes controllers
+   * [✔️] Should create all of the models in schema
+   * [✔️] Models should contain the passed props, and match modelTemplate.js
    */
   describe('actions.buildSchema', function() {
-    
-    
+
+    // Setup
+    setups.createTestConfig(setups.configText);
+    let beaConfig = helpers.loadBeaConfig();
+    before(function() {
+      return actions.buildSchema();
+    })
+
+    it('should create all of the controllers in schema in the beaConfig.controllersPath location', function() {
+      let schema = helpers.getProperty('schema');
+
+      schema.controllers.forEach(function(controller) {
+        var path = beaConfig.controllersPath+'/'+controller.name+'Controller.js';
+        expect(path).to.be.a.path();
+        assert.pathExists(path);
+      })
+    })
+
+    it('Controllers should contain correct routes if they are customRoutes controllers',function() {
+      let schema = helpers.getProperty('schema');
+
+      schema.controllers.forEach(function(controller) {
+        let pathToController = beaConfig.controllersPath+'/'+controller.name+'Controller.js';
+
+          let controllerContents = fs.readFileSync(pathToController).toString();
+          let containsAll = true;
+          let routesString = '';
+        if (controller.routes !== "plain") {
+          // check if it contains the routes
+          for(let prop in controller.routes) {
+            let lowercaseProp = prop.toLowerCase();
+            let lowercaseMethod = controller.routes[prop].toLowerCase();
+
+            routesString = `router.${lowercaseMethod}('/${lowercaseProp}',(req,res)`;
+            if (!controllerContents.includes(routesString)) {
+              containsAll = false; break;
+            }
+
+          }
+        }
+        assert.equal(containsAll,true);
+      })
+    })
+
+
+    it('should create all of the models in schema', function() {
+      let schema = helpers.getProperty('schema');
+
+      schema.models.forEach(function(model) {
+        var path = beaConfig.modelsPath+'/'+model.name+'.js';
+        expect(path).to.be.a.path();
+        assert.pathExists(path);
+      })
+    })
+
+    it('all models should contain passed props, and match modelTemplate.js', function() {
+      let schema = helpers.getProperty('schema');
+
+      schema.models.forEach(function(model) {
+        let pathToModel = beaConfig.modelsPath+'/'+model.name+'.js';
+
+        let modelContents = fs.readFileSync(pathToModel).toString();
+        let templateContents = fs.readFileSync(globalModulePath+'/templates/modelTemplate.js').toString();
+        let expectedContents = templateContents.toString().replace(new RegExp('modelname','g'), model.name);
+
+        let props = model.props;
+
+        props = props.replace(new RegExp(',', 'g'), ',\n ');
+        props = props.replace(new RegExp('{', 'g'), '{\n   ');
+        props = props.replace(new RegExp('}', 'g'), '\n }');
+        expectedContents = expectedContents.replace('PROPS',props);
+
+
+        assert.equal(modelContents,expectedContents);
+      })
+    })
+
   })
+
+  
 
 })

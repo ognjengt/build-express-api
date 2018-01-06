@@ -61,5 +61,13 @@ program
     actions.createConfig();
   })
 
+program
+  .command('build-schema')
+  .alias('bc')
+  .description('Creates multiple controllers and models in the directories specified in the beaConfig.json. Requires schema object in beaConfig.json')
+  .action(() => {
+    actions.buildSchema();
+  })
+
 
 program.parse(process.argv);
