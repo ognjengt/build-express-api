@@ -14,6 +14,7 @@ Create controllers, models and add routes in matter of seconds.
 * [Creating a new controller](#creating-a-new-controller)
 * [Adding routes to a controller](#adding-routes-to-a-controller)
 * [Creating new model](#creating-new-model)
+* [Creating multiple controllers and models](#creating-multiple-controllers-and-models)
 
 ## Installation
 Install it once globally:
