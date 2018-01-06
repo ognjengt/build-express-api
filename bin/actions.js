@@ -323,30 +323,36 @@ actions.buildSchema = () => {
   var result = true;
 
   // Create controllers
-  schema.controllers.forEach(function(controller) {
-    if(controller.routes === "plain") {
-      actions.createPlainController(controller.name);
-    }
-    else if (controller.routes instanceof Object) {
-      actions.createControllerWithCustomRoutes(controller.name, controller.routes);
-    }
-    else {
-      console.log(config.terminal_colors.red,"✖ Schema is not in valid format, please check beaConfig.json, or https://github.com/ognjengt/build-express-api documentation to see how to write schema in a correct format. Additional message: Some controller routes aren't in correct format.");
-    console.log(config.terminal_colors.white);
-
-      result = false; 
-      return;
-    }
-  })
+  if (schema.controllers != null) {
+    schema.controllers.forEach(function(controller) {
+      if(controller.routes === "plain") {
+        actions.createPlainController(controller.name);
+      }
+      else if (controller.routes instanceof Object) {
+        actions.createControllerWithCustomRoutes(controller.name, controller.routes);
+      }
+      else {
+        console.log(config.terminal_colors.red,"✖ Schema is not in valid format, please check beaConfig.json, or https://github.com/ognjengt/build-express-api documentation to see how to write schema in a correct format. Additional message: Some controller routes aren't in correct format.");
+      console.log(config.terminal_colors.white);
+  
+        result = false; 
+        return;
+      }
+    })
+  }
+  
 
   if (!result) {
     return false;
   }
 
   // Create models
-  schema.models.forEach(function(model) {
-    actions.createModel(model.name, model.props);
-  })
+  if (schema.models != null) {
+    schema.models.forEach(function(model) {
+      actions.createModel(model.name, model.props);
+    })
+  }
+  
 
   return result;
 }

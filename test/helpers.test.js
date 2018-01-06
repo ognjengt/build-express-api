@@ -60,7 +60,9 @@ describe('Helpers', function() {
 
   })
   /**
-   * [✔️] For given property 'schema' should return the value that is object, and contains controllers and models keys
+   * [✔️] For given property 'schema' should return the value that is object, and contains controllers or models keys
+   * [✔️] Controllers should be an array and validation should pass
+   * [✔️] Models should be an array and validation should pass
    */
   describe('helpers.validateSchema', function() {
 
@@ -71,8 +73,22 @@ describe('Helpers', function() {
       let result = helpers.getProperty('schema');
       let validation = helpers.validateSchema(result);
 
-      expect(result).to.be.an('object').that.has.all.keys('controllers','models');
+      expect(result).to.be.an('object').that.has.any.keys('controllers','models');
+      assert.equal(validation,true);
+    })
+
+    it('controllers should be an array and validation should pass', function() {
+      let result = helpers.getProperty('schema');
+      let validation = helpers.validateSchema(result);
+
       expect(result.controllers).to.be.an('array');
+      assert.equal(validation,true);
+    })
+
+    it('models should be an array and validation should pass', function() {
+      let result = helpers.getProperty('schema');
+      let validation = helpers.validateSchema(result);
+
       expect(result.models).to.be.an('array');
       assert.equal(validation,true);
     })

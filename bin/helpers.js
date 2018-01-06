@@ -26,23 +26,31 @@ helpers.getProperty = (property) => {
 }
 
 helpers.validateSchema = (schema) => {
-  var validated = true;
+  var validatedControllers = true;
+  var validatedModels = true;
 
   if(schema == null) return false;
 
-  if(schema.controllers instanceof Array && schema.models instanceof Array) {
-    schema.controllers.forEach(function(controller) {
-      if(controller.name == "" || controller.name == null) {validated = false; return;}
-      if(controller.routes == "" || controller.routes == null) {validated = false; return;}
-    })
-    
-    schema.models.forEach(function(model) {
-      if(model.name == "" || model.name == null) {validated = false; return;}
-      if(model.props == "" || model.props == null) {validated = false; return;}
-    })
-  } else validated = false;
+  if (schema.controllers != null) {
+    if(schema.controllers instanceof Array) {
+      schema.controllers.forEach(function(controller) {
+        if(controller.name == "" || controller.name == null) {validatedControllers = false; return;}
+        if(controller.routes == "" || controller.routes == null) {validatedControllers = false; return;}
+      })
+    } else validatedControllers = false;
+  } else validatedControllers = false;
+
+  if (schema.models != null) {
+    if(schema.models instanceof Array) {
+      schema.models.forEach(function(model) {
+        if(model.name == "" || model.name == null) {validatedModels = false; return;}
+        if(model.props == "" || model.props == null) {validatedModels = false; return;}
+      })
+    } else validatedModels = false;
+  } else validatedModels = false;
   
-  return validated;
+  
+  return validatedControllers || validatedModels;
 }
 
 module.exports = helpers;
