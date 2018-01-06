@@ -109,7 +109,7 @@ actions.createPlainController = (controllerName) => {
     return true;
   }
   else {
-    console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
+    console.log(config.terminal_colors.red,"✖ Controller "+fullControllerName+" already exists.");
     console.log(config.terminal_colors.white);
     return false;
   }
@@ -194,7 +194,7 @@ module.exports = router;
     return true;
   }
   else {
-    console.log(config.terminal_colors.red,"✖ Controller with that name already exists.");
+    console.log(config.terminal_colors.red,"✖ Controller "+fullControllerName+" already exists.");
     console.log(config.terminal_colors.white);
     return false;
   }
@@ -273,7 +273,7 @@ actions.createModel = (name,props) => {
   name = name.charAt(0).toUpperCase() + name.slice(1);
 
   if (fs.existsSync(beaConfig.modelsPath+'/'+name+'.js')) {
-    console.log(config.terminal_colors.red,"✖ Model with that name already exists.");
+    console.log(config.terminal_colors.red,"✖ Model "+name+" already exists.");
     console.log(config.terminal_colors.white);
     return false;
   }
