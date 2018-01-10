@@ -1,7 +1,7 @@
 const fs                        = require('fs');
 const config                    = require('./config');
-const { getInstalledPathSync }  = require('get-installed-path');
-var globalModulePath = getInstalledPathSync('build-express-api');
+const path = require('path');
+var globalModulePath =  path.join(__dirname, '..')
 
 var helpers = {};
 

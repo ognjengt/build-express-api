@@ -1,13 +1,12 @@
 // Implementations of actions
 const fs                        = require('fs');
 const config                    = require('./config');
-const { getInstalledPathSync }  = require('get-installed-path');
 const helpers                   = require('./helpers');
 
 var actions = {};
 
-var globalModulePath = getInstalledPathSync('build-express-api');
-
+const path = require('path');
+var globalModulePath =  path.join(__dirname, '..')
 /**
  * Initializes the current directory with all the files needed.
  */
