@@ -4,10 +4,10 @@ const fs      = require('fs');
 var chai      = require('chai');
 var setups    = require('./setups');
 var expect = chai.expect;
-const { getInstalledPathSync }  = require('get-installed-path');
 
 chai.use(require('chai-fs'));
-var globalModulePath = getInstalledPathSync('build-express-api');
+const path = require('path');
+var globalModulePath =  path.join(__dirname, '..')
 
 describe('Helpers', function() {
 
