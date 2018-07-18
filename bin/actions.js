@@ -150,7 +150,7 @@ actions.createControllerWithCustomRoutes = (controllerName, routes) => {
 
         routesString += `// ${lowercaseMethod} /api/${basicControllerName}/${lowercaseProp}
 router.${lowercaseMethod}('/${lowercaseProp}',(req,res) => {
-  
+  res.send('${lowercaseMethod} ${lowercaseProp}');
 });
 
 `;
