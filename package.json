@@ -1,6 +1,6 @@
 {
   "name": "build-express-api",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Command line interface for instantly building an express rest api",
   "main": "./bin/cli.js",
   "preferGlobal": true,
@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/ognjengt/build-express-api#readme",
   "dependencies": {
-    "commander": "^2.12.1",
-    "inquirer": "^4.0.0"
+    "commander": "^2.16.0",
+    "inquirer": "^4.0.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",
