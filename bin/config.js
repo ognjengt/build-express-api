@@ -1,6 +1,6 @@
 // Configuration for app (routes to all of the templates, etc...)
 module.exports = {
-  cli_version: '1.2.3',
+  cli_version: '1.2.4',
   terminal_colors: {
     green: '\x1b[32m',
     red: '\x1b[31m',

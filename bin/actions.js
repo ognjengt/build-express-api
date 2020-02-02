@@ -91,7 +91,9 @@ actions.createPlainController = (controllerName) => {
       }
     })
     arrayOfLines.splice(++index,0,"\n");
-    arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+beaConfig.controllersPath+"/"+fullControllerName+"');");
+    var splitCount = beaConfig.controllersPath.split('/').length;
+    var controllersPath = splitCount > 2 ? "./" + beaConfig.controllersPath.split('/')[splitCount-1] : beaConfig.controllersPath;
+    arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+controllersPath+"/"+fullControllerName+"');");
     arrayOfLines.splice(++index,0,"app.use('/api/"+routeName+"', "+fullControllerName+");");
 
     var newServerText = arrayOfLines.join('\n');
@@ -177,7 +179,9 @@ module.exports = router;
         }
       })
       arrayOfLines.splice(++index,0,"\n");
-      arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+beaConfig.controllersPath+"/"+fullControllerName+"');");
+      var splitCount = beaConfig.controllersPath.split('/').length;
+      var controllersPath = splitCount > 2 ? "./" + beaConfig.controllersPath.split('/')[splitCount-1] : beaConfig.controllersPath;
+      arrayOfLines.splice(++index,0,"var "+ fullControllerName + " = require('"+controllersPath+"/"+fullControllerName+"');");
       arrayOfLines.splice(++index,0,"app.use('/api/"+basicControllerName+"', "+fullControllerName+");");
   
       var newServerText = arrayOfLines.join('\n');
